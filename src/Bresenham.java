@@ -48,12 +48,5 @@ public class Bresenham {
 
             return pontos; // Retorna a lista de pontos da linha
         }
-
-        public static void main(String[] args) {
-            List<int[]> pontosLinha = bresenham(1, 1, 4, 10);
-            for (int[] ponto : pontosLinha) {
-                System.out.println("(" + ponto[0] + ", " + ponto[1] + ")");
-            }
-        }
     }
 
