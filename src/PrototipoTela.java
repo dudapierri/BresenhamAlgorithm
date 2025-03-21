@@ -1,6 +1,13 @@
 import javax.swing.*;
+import core.*;
 
-public class PrototipoTeja extends JPanel implements Runnable{
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.util.ArrayList;
+
+public class PrototipoTela extends JPanel implements Runnable{
     //Definições da Tela
     private JFrame frame;
     private final int larguraTela = 1280;
@@ -31,7 +38,7 @@ public class PrototipoTeja extends JPanel implements Runnable{
     }
 
     //Construtor da class, carrega tudo
-	public PrototipoTela(){
+	public void PrototipoTela(){
 
         //Seta o tamanho do componente
 		setSize(larguraTela, alturaTela);
@@ -61,7 +68,7 @@ public class PrototipoTeja extends JPanel implements Runnable{
 					p1linhadesenhando = new Ponto(clickX, clickY);
 				}else {
 					Ponto p2 = new Ponto(clickX, clickY);
-					Linha linha = new Linha(p1linhadesenhando, p2);
+					Linha linha = new Linha(p1linhadesenhando.x,p1linhadesenhando.y, p2.x,p2.y);
 					listaDeLinhas.add(linha);
 					p1linhadesenhando = null;
 				}
