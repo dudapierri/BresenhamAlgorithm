@@ -1,5 +1,4 @@
 import javax.swing.*;
-import core.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -38,7 +37,7 @@ public class PrototipoTela extends JPanel implements Runnable{
     }
 
     //Construtor da class, carrega tudo
-	public void PrototipoTela(){
+	public PrototipoTela(){
 
         //Seta o tamanho do componente
 		setSize(larguraTela, alturaTela);
@@ -69,6 +68,7 @@ public class PrototipoTela extends JPanel implements Runnable{
 				}else {
 					Ponto p2 = new Ponto(clickX, clickY);
 					Linha linha = new Linha(p1linhadesenhando.x,p1linhadesenhando.y, p2.x,p2.y);
+					linha.pixeisBresenham = Bresenham.bresenham(linha.a.x,linha.a.y, linha.b.x, linha.b.y);
 					listaDeLinhas.add(linha);
 					p1linhadesenhando = null;
 				}
@@ -110,7 +110,7 @@ public class PrototipoTela extends JPanel implements Runnable{
 		
 		g.setColor(Color.black);
 		for(int i = 0; i < listaDeLinhas.size();i++) {
-			listaDeLinhas.get(i).desenhase((Graphics2D)g);
+			listaDeLinhas.get(i).desenhase(this);
 		}
 		
 		g.setColor(Color.red);
