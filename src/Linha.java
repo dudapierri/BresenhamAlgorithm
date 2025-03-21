@@ -22,4 +22,8 @@ public class Linha {
         }
     }
 
+    public void detectaClipping(){
+
+    }
+
 }

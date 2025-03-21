@@ -107,6 +107,12 @@ public class PrototipoTela extends JPanel implements Runnable{
 		
 		g.setColor(Color.white);
 		g.fillRect(0, 0, larguraTela, alturaTela);
+
+		g.setColor(Color.green);
+		desenhaLinhaHorizontal(50,50,700);
+		desenhaLinhaHorizontal(50,550,700);
+		desenhaLinhaVertical(50,50,500);
+		desenhaLinhaVertical(750, 50, 500);
 		
 		g.setColor(Color.black);
 		for(int i = 0; i < listaDeLinhas.size();i++) {
@@ -131,7 +137,7 @@ public class PrototipoTela extends JPanel implements Runnable{
 			
 			bufferDeVideo[pospix] = (byte)255;
 			bufferDeVideo[pospix+1] = (byte)0;
-			bufferDeVideo[pospix+2] = (byte)0;
+			bufferDeVideo[pospix+2] = (byte)255;
 			bufferDeVideo[pospix+3] = (byte)0;
 			pospix+=4;
 		}
@@ -145,8 +151,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 			
 			bufferDeVideo[pospix] = (byte)255;
 			bufferDeVideo[pospix+1] = (byte)0;
-			bufferDeVideo[pospix+2] = (byte)0;
-			bufferDeVideo[pospix+3] = (byte)255;
+			bufferDeVideo[pospix+2] = (byte)255;
+			bufferDeVideo[pospix+3] = (byte)0;
 			pospix += (larguraTela * 4);
 		}
 	}
