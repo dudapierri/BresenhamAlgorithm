@@ -18,6 +18,12 @@ public class PrototipoTela extends JPanel implements Runnable{
     private int mouseX;
     private int mouseY;
 
+	//Limites tela desenhavel
+	private final int limiteSuperior = 50; // Superior e inferior é eixo Y
+	private final int limiteInferior = 550;
+	private final int limiteEsquerdo = 50; // Esquerdo e direito é eixo X
+	private final int limiteDireito = 750;
+
     private Ponto p1linhadesenhando = null;
     private ArrayList<Linha> listaDeLinhas = new ArrayList<>();
 	
@@ -26,7 +32,24 @@ public class PrototipoTela extends JPanel implements Runnable{
 	private BufferedImage imageBuffer;
 	private byte[] bufferDeVideo;
 
-    //Config teste de tela
+	// Getter Variaveis de limite de area desenhavel
+	public int getLimiteSuperior() {
+		return limiteSuperior;
+	}
+
+	public int getLimiteInferior() {
+		return limiteInferior;
+	}
+
+	public int getLimiteEsquerdo() {
+		return limiteEsquerdo;
+	}
+
+	public int getLimiteDireito() {
+		return limiteDireito;
+	}
+
+	//Config teste de tela
     public void tela(){
         this.frame = new JFrame("Prototipo de Tela");
         this.frame.setSize(800, 600);
@@ -108,11 +131,11 @@ public class PrototipoTela extends JPanel implements Runnable{
 		g.setColor(Color.white);
 		g.fillRect(0, 0, larguraTela, alturaTela);
 
-		g.setColor(Color.green);
-		desenhaLinhaHorizontal(50,50,700);
-		desenhaLinhaHorizontal(50,550,700);
-		desenhaLinhaVertical(50,50,500);
-		desenhaLinhaVertical(750, 50, 500);
+		//Desenha borda usando os limites definidos la em cima de parametro
+		desenhaLinhaHorizontal(limiteEsquerdo, limiteSuperior,limiteDireito - limiteEsquerdo);
+		desenhaLinhaHorizontal(limiteEsquerdo,limiteInferior,limiteDireito - limiteEsquerdo);
+		desenhaLinhaVertical(limiteEsquerdo, limiteSuperior,limiteInferior - limiteSuperior);
+		desenhaLinhaVertical(limiteDireito, limiteSuperior, limiteInferior - limiteSuperior);
 		
 		g.setColor(Color.black);
 		for(int i = 0; i < listaDeLinhas.size();i++) {
