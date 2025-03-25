@@ -22,7 +22,7 @@ public class PrototipoTela extends JPanel implements Runnable{
 	private final int limiteSuperior = 50; // Superior e inferior é eixo Y
 	private final int limiteInferior = 550;
 	private final int limiteEsquerdo = 50; // Esquerdo e direito é eixo X
-	private final int limiteDireito = 750;
+	private final int limiteDireito =  750;
 
     private Ponto p1linhadesenhando = null;
     private ArrayList<Linha> listaDeLinhas = new ArrayList<>();
