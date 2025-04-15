@@ -1,5 +1,6 @@
 package core3d;
 
+
 import core2d.*;
 import geral.*;
 
@@ -18,9 +19,13 @@ public class Triangulo3D {
 
     public void desenhase(PrototipoTela tela) {
         // Projeção paralela
-        Ponto p1 = projetarPara2D(pa);
-        Ponto p2 = projetarPara2D(pb);
-        Ponto p3 = projetarPara2D(pc);
+        Ponto3D p1tresde = fazPerspectiva(pa);
+        Ponto3D p2tresde = fazPerspectiva(pb);
+        Ponto3D p3tresde = fazPerspectiva(pc);
+
+        Ponto p1 = projetarPara2D(p1tresde);
+        Ponto p2 = projetarPara2D(p2tresde);
+        Ponto p3 = projetarPara2D(p3tresde);
 
         // Clipar cada aresta
         Linha l1 = Clipping.clipping(p1.x, p1.y, p2.x, p2.y, tela);
@@ -43,6 +48,14 @@ public class Triangulo3D {
 
     private Ponto projetarPara2D(Ponto3D p) {
         return new Ponto((int)p.x, (int)p.y); // Projeção paralela simples
+    }
+
+    private Ponto3D fazPerspectiva(Ponto3D p) {
+        Matriz4x4 mat = new Matriz4x4();
+        mat.setPerspectiva(500);
+        Ponto3D pErspectiva =  p.multiplicaMatDesenho(mat);
+        pErspectiva.ajustaW();
+        return pErspectiva;
     }
 
     public void translacao(float a,float b, float c) {

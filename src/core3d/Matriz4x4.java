@@ -148,4 +148,23 @@ public class Matriz4x4 {
         mat[3][2] = 0;
         mat[3][3] = 1;
     }
+
+    public void setPerspectiva(float d) {
+        zera();
+        mat[0][0] = 1;
+        mat[0][3] = 0;
+
+        mat[1][1] = 1;
+        mat[1][3] = 0;
+
+        mat[2][0] = 0;
+        mat[2][1] = 0;
+        mat[2][2] = 0;
+        mat[2][3] = 0;
+
+        mat[3][2] = 1/d;
+        mat[3][3] = 1;
+    }
+
+
 }

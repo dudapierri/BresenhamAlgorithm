@@ -230,8 +230,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 			}
 		});
 
-		criaCubo(100,100,0,100,100,100);
-		criaCubo(300,200,0,100,200,100);
+		criaCubo(100,100,0,100,100,300);
+		criaCubo(300,200,0,100,200,300);
 	}
 
 	private void criaCubo(float x,float y, float z, float lx,float ly, float lz) {
@@ -337,6 +337,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 		desenhaLinhaHorizontal(x_min, y_max, x_max - x_min);
 		desenhaLinhaVertical(x_min, y_min, y_max - y_min);
 		desenhaLinhaVertical(x_max, y_min, y_max - y_min);
+
+		// FAZ PERSPECTIVA
 		
 		g.setColor(Color.black);
 		for(int i = 0; i < listaDeLinhas.size();i++) {
