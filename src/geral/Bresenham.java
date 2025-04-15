@@ -1,8 +1,10 @@
+package geral;
+
 import java.util.ArrayList;
 import java.util.List;
 public class Bresenham {
         /**
-         * Implementação do algoritmo de Bresenham para desenhar uma linha entre dois pontos.
+         * Implementação do algoritmo de geral.Bresenham para desenhar uma linha entre dois pontos.
          *
          * @param xInicial Coordenada X do ponto inicial
          * @param yInicial Coordenada Y do ponto inicial

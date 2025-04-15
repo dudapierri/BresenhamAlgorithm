@@ -1,6 +1,10 @@
+package geral;
+
+import core2d.Linha;
+
 public class Clipping {
 
-    //Codigo das regioes Clipping
+    //Codigo das regioes geral.Clipping
     static final int INSIDE = 0; // 0000
     static final int LEFT = 1; // 0001
     static final int RIGHT = 2; // 0010
@@ -32,7 +36,7 @@ public class Clipping {
                 return new Linha(x1,y1,x2,y2);
             }
             else if((cod1 & cod2) != INSIDE){ // Ve se os dois estão fora da tela e não passa por dentro dela
-                return new Linha(-1,-1,-1,-1); // Retorna uma Linha invalida pra verificação no retorno
+                return new Linha(-1,-1,-1,-1); // Retorna uma core2d.Linha invalida pra verificação no retorno
             }
             else{
                 int codFora; // Codigo da região do ponto fora da tela

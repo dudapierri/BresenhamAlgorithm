@@ -1,3 +1,7 @@
+package geral;
+
+import core2d.*;
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -87,7 +91,7 @@ public class PrototipoTela extends JPanel implements Runnable{
                 clickX = e.getX();
 				clickY = e.getY();
 				
-				System.out.println("Ponto: " + clickX + " " + clickY);
+				System.out.println("core2d.Ponto: " + clickX + " " + clickY);
 				if(p1linhadesenhando == null) {
 					p1linhadesenhando = new Ponto(clickX, clickY);
 				}else {
@@ -126,11 +130,99 @@ public class PrototipoTela extends JPanel implements Runnable{
             public void mouseMoved(MouseEvent e) {}
             
         });
+
+		addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					transladaLinhas(5, 0);
+				} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+					transladaLinhas(-5, 0);
+				} else if(e.getKeyCode() == KeyEvent.VK_UP) {
+					transladaLinhas(0, -5);
+				} else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+					transladaLinhas(0, 5);
+				} else if(e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) {
+					escalaLinhas(1.02, 1.02);
+				} else if(e.getKeyCode() == KeyEvent.VK_MINUS) {
+					escalaLinhas(0.98, 0.98);
+				} else if(e.getKeyCode() == KeyEvent.VK_R) {
+					rotacionaLinhas(Math.toRadians(5));
+				} else if(e.getKeyCode() == KeyEvent.VK_T) {
+					rotacionaLinhas(Math.toRadians(-5));
+				} else if(e.getKeyCode() == KeyEvent.VK_E) {
+					shearLinhas(0.02, 0);
+				} else if(e.getKeyCode() == KeyEvent.VK_W) {
+					shearLinhas(0, 0.02);
+				}
+			}
+		});
 	}
+
+
+	public void transladaLinhas(double tx, double ty) { //// aplica translação em todas as linhas da tela
+		Matriz3x3 matriz = new Matriz3x3();
+		matriz.setTranslate(tx, ty);
+		for(Linha linha : listaDeLinhas) {
+			System.out.println("func translada linhas Prototipo tela");
+			linha.aplicaTransformacao(matriz, this);
+		}
+	}
+
+	public void escalaLinhas(double sx, double sy) { //// Aplica escala (zoom) em torno do ponto central da área desenhável
+		Matriz3x3 matrizTranslateOrigem = new Matriz3x3();
+		matrizTranslateOrigem.setTranslate(-400, -300);
+
+		Matriz3x3 matrizEscala = new Matriz3x3();
+		matrizEscala.setSacale(sx, sy);
+
+		Matriz3x3 matrizTranslateVolta = new Matriz3x3();
+		matrizTranslateVolta.setTranslate(400, 300);
+
+		for(Linha linha : listaDeLinhas) {
+			linha.aplicaTransformacao(matrizTranslateOrigem, this);
+			linha.aplicaTransformacao(matrizEscala, this);
+			linha.aplicaTransformacao(matrizTranslateVolta, this);
+		}
+	}
+
+	public void rotacionaLinhas(double theta) { // aplica rotação em torno do centro da tela
+		Matriz3x3 matrizTranslateOrigem = new Matriz3x3();
+		matrizTranslateOrigem.setTranslate(-400, -300);
+
+		Matriz3x3 matrizRotacao = new Matriz3x3();
+		matrizRotacao.setRotate(theta);
+
+		Matriz3x3 matrizTranslateVolta = new Matriz3x3();
+		matrizTranslateVolta.setTranslate(400, 300);
+
+		for(Linha linha : listaDeLinhas) {
+			linha.aplicaTransformacao(matrizTranslateOrigem, this);
+			linha.aplicaTransformacao(matrizRotacao, this);
+			linha.aplicaTransformacao(matrizTranslateVolta, this);
+		}
+	}
+
+	public void shearLinhas(double shx, double shy) { // aplica shear nas linhas
+		Matriz3x3 matrizShear = new Matriz3x3();
+		matrizShear.setShear(shx, shy);
+		for(Linha linha : listaDeLinhas) {
+			linha.aplicaTransformacao(matrizShear, this);
+		}
+	}
+
 
     //Desenha as linhas
     @Override
 	public void paint(Graphics g) {
+
+		Graphics2D g2d = imageBuffer.createGraphics();
+		g2d.setColor(Color.WHITE);
+		g2d.fillRect(0, 0, larguraTela, alturaTela);
+		g2d.dispose();
+
+		// Continua com o resto da pintura normal
+		g.setColor(Color.white);
+		g.fillRect(0, 0, larguraTela, alturaTela);
 		
 		g.setColor(Color.white);
 		g.fillRect(0, 0, larguraTela, alturaTela);
