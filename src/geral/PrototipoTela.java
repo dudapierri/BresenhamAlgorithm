@@ -1,6 +1,7 @@
 package geral;
 
 import core2d.*;
+import core3d.*;
 
 import javax.swing.*;
 
@@ -15,6 +16,8 @@ public class PrototipoTela extends JPanel implements Runnable{
     private JFrame frame;
     private final int larguraTela = 1280;
     private final int alturaTela = 720;
+
+	private boolean is3d = true;
 
     //Mouse
     private int clickX;
@@ -32,6 +35,7 @@ public class PrototipoTela extends JPanel implements Runnable{
 
     private Ponto p1linhadesenhando = null;
     private ArrayList<Linha> listaDeLinhas = new ArrayList<>();
+	private ArrayList<Triangulo3D> listaDeTriangulos = new ArrayList<>();
 	
 	private boolean ativo = true;
 	
@@ -133,31 +137,150 @@ public class PrototipoTela extends JPanel implements Runnable{
 
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-					transladaLinhas(5, 0);
-				} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-					transladaLinhas(-5, 0);
-				} else if(e.getKeyCode() == KeyEvent.VK_UP) {
-					transladaLinhas(0, -5);
-				} else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-					transladaLinhas(0, 5);
-				} else if(e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) {
-					escalaLinhas(1.02, 1.02);
-				} else if(e.getKeyCode() == KeyEvent.VK_MINUS) {
-					escalaLinhas(0.98, 0.98);
-				} else if(e.getKeyCode() == KeyEvent.VK_R) {
-					rotacionaLinhas(Math.toRadians(5));
-				} else if(e.getKeyCode() == KeyEvent.VK_T) {
-					rotacionaLinhas(Math.toRadians(-5));
-				} else if(e.getKeyCode() == KeyEvent.VK_E) {
-					shearLinhas(0.02, 0);
-				} else if(e.getKeyCode() == KeyEvent.VK_W) {
-					shearLinhas(0, 0.02);
+				if(e.getKeyCode() == KeyEvent.VK_1){
+					is3d = false;
+				}else
+				if(e.getKeyCode() == KeyEvent.VK_2){
+					is3d = true;
+				}
+				if(!is3d){
+					if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+						transladaLinhas(5, 0);
+					} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+						transladaLinhas(-5, 0);
+					} else if(e.getKeyCode() == KeyEvent.VK_UP) {
+						transladaLinhas(0, -5);
+					} else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+						transladaLinhas(0, 5);
+					} else if(e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) {
+						escalaLinhas(1.02, 1.02);
+					} else if(e.getKeyCode() == KeyEvent.VK_MINUS) {
+						escalaLinhas(0.98, 0.98);
+					} else if(e.getKeyCode() == KeyEvent.VK_R) {
+						rotacionaLinhas(Math.toRadians(5));
+					} else if(e.getKeyCode() == KeyEvent.VK_T) {
+						rotacionaLinhas(Math.toRadians(-5));
+					} else if(e.getKeyCode() == KeyEvent.VK_E) {
+						shearLinhas(0.02, 0);
+					} else if(e.getKeyCode() == KeyEvent.VK_W) {
+						shearLinhas(0, 0.02);
+					}
+				}else{
+					if(e.getKeyCode() == KeyEvent.VK_DOWN){
+						for(int i = 0; i < listaDeTriangulos.size(); i++){
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.translacao(0, 5, 0);
+						}
+					}
+					else if(e.getKeyCode() == KeyEvent.VK_UP ){
+						for(int i = 0; i < listaDeTriangulos.size(); i++){
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.translacao(0, -5, 0);
+						}
+					}
+					else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+						for(int i = 0; i < listaDeTriangulos.size(); i++){
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.translacao(5, 0, 0);
+						}
+					}
+					else if(e.getKeyCode() == KeyEvent.VK_LEFT ){
+						for(int i = 0; i < listaDeTriangulos.size(); i++){
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.translacao(-5, 0, 0);
+						}
+					}
+					if (e.getKeyCode() == KeyEvent.VK_MINUS) {
+						for (int i = 0; i < listaDeTriangulos.size(); i++) {
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.escala(0.8f, 0.8f,0.8f);
+						}
+					}
+					if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) {
+						for (int i = 0; i < listaDeTriangulos.size(); i++) {
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.escala(1.2f, 1.2f, 1.2f);
+						}
+					}
+					if (e.getKeyCode() == KeyEvent.VK_NUMPAD4) {
+						for (int i = 0; i < listaDeTriangulos.size(); i++) {
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.rotacaoY(-5);
+						}
+
+					}
+					if (e.getKeyCode() == KeyEvent.VK_NUMPAD6) {
+						for (int i = 0; i < listaDeTriangulos.size(); i++) {
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.rotacaoY(+5);
+						}
+
+					}
+					if (e.getKeyCode() == KeyEvent.VK_NUMPAD8) {
+						for (int i = 0; i < listaDeTriangulos.size(); i++) {
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.rotacaoX(+5);
+						}
+
+					}
+					if (e.getKeyCode() == KeyEvent.VK_NUMPAD2) {
+						for (int i = 0; i < listaDeTriangulos.size(); i++) {
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.rotacaoX(-5);
+						}
+
+					}
+					if (e.getKeyCode() == KeyEvent.VK_NUMPAD9) {
+						for (int i = 0; i < listaDeTriangulos.size(); i++) {
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.rotacaoZ(+5);
+						}
+
+					}
+					if (e.getKeyCode() == KeyEvent.VK_NUMPAD7) {
+						for (int i = 0; i < listaDeTriangulos.size(); i++) {
+							Triangulo3D tri = listaDeTriangulos.get(i);
+							tri.rotacaoZ(-5);
+						}
+
+					}
 				}
 			}
 		});
+
+		criaCubo(100,100,0,100,100,100);
+		criaCubo(300,200,0,100,200,100);
 	}
 
+	private void criaCubo(float x,float y, float z, float lx,float ly, float lz) {
+		Ponto3D p1 = new Ponto3D(x, y, z);
+		Ponto3D p2 = new Ponto3D(x+lx, y, z);
+		Ponto3D p3 = new Ponto3D(x+lx, y+ly, z);
+		Ponto3D p4 = new Ponto3D(x, y+ly, z);
+
+		Ponto3D p5 = new Ponto3D(x, y, z+lz);
+		Ponto3D p6 = new Ponto3D(x+lx, y, z+lz);
+		Ponto3D p7 = new Ponto3D(x+lx, y+ly, z+lz);
+		Ponto3D p8 = new Ponto3D(x, y+ly, z+lz);
+
+		listaDeTriangulos.add(new Triangulo3D(p1,p2,p3));
+		listaDeTriangulos.add(new Triangulo3D(p3,p4,p1));
+
+		listaDeTriangulos.add(new Triangulo3D(p5,p6,p7));
+		listaDeTriangulos.add(new Triangulo3D(p7,p8,p5));
+
+		listaDeTriangulos.add(new Triangulo3D(p1,p4,p5));
+		listaDeTriangulos.add(new Triangulo3D(p4,p8,p5));
+
+		listaDeTriangulos.add(new Triangulo3D(p2,p3,p6));
+		listaDeTriangulos.add(new Triangulo3D(p3,p7,p6));
+
+		listaDeTriangulos.add(new Triangulo3D(p1,p2,p6));
+		listaDeTriangulos.add(new Triangulo3D(p1,p6,p5));
+
+		listaDeTriangulos.add(new Triangulo3D(p4,p3,p7));
+		listaDeTriangulos.add(new Triangulo3D(p6,p7,p8));
+	}
 
 	public void transladaLinhas(double tx, double ty) { //// aplica translação em todas as linhas da tela
 		Matriz3x3 matriz = new Matriz3x3();
@@ -236,6 +359,9 @@ public class PrototipoTela extends JPanel implements Runnable{
 		g.setColor(Color.black);
 		for(int i = 0; i < listaDeLinhas.size();i++) {
 			listaDeLinhas.get(i).desenhase(this);
+		}
+		for (Triangulo3D t : listaDeTriangulos) {
+			t.desenhase(this);
 		}
 		
 		g.setColor(Color.red);
