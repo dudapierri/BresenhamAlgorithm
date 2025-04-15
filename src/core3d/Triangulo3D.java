@@ -95,4 +95,13 @@ public class Triangulo3D {
         pb.multiplicaMat(m);
         pc.multiplicaMat(m);
     }
+
+    public void rotacaoEixoQualquer(float anguloGraus, float ux, float uy, float uz) {
+        Matriz4x4 rotacao = new Matriz4x4();
+        rotacao.setRotateAxis(anguloGraus, ux, uy, uz);
+
+        pa.multiplicaMat(rotacao);
+        pb.multiplicaMat(rotacao);
+        pc.multiplicaMat(rotacao);
+    }
 }

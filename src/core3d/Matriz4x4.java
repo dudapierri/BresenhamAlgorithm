@@ -121,21 +121,31 @@ public class Matriz4x4 {
         mat[3][3] = 1;
     }
 
-//	public void setRotateAxis(float ang,float x0,float y0) {
-//		zera();
-//		float rad = ang*0.017453f;
-//		float sin = (float)Math.sin(rad);
-//		float cos = (float)Math.cos(rad);
-//		mat[0][0] = cos;
-//		mat[0][1] = -sin;
-//		mat[0][2] = x0*(1-cos)+y0*sin;
-//
-//		mat[1][0] = sin;
-//		mat[1][1] = cos;
-//		mat[1][2] = y0*(1-cos)-x0*sin;
-//
-//		mat[2][0] = 0;
-//		mat[2][1] = 0;
-//		mat[2][2] = 1;
-//	}
+    public void setRotateAxis(float angle, float ux, float uy, float uz) {
+        zera();
+        float rad = angle * 0.017453f; // graus -> radianos
+        float cos = (float)Math.cos(rad);
+        float sin = (float)Math.sin(rad);
+        float oneMinusCos = 1 - cos;
+
+        mat[0][0] = cos + ux * ux * oneMinusCos;
+        mat[0][1] = ux * uy * oneMinusCos - uz * sin;
+        mat[0][2] = ux * uz * oneMinusCos + uy * sin;
+        mat[0][3] = 0;
+
+        mat[1][0] = uy * ux * oneMinusCos + uz * sin;
+        mat[1][1] = cos + uy * uy * oneMinusCos;
+        mat[1][2] = uy * uz * oneMinusCos - ux * sin;
+        mat[1][3] = 0;
+
+        mat[2][0] = uz * ux * oneMinusCos - uy * sin;
+        mat[2][1] = uz * uy * oneMinusCos + ux * sin;
+        mat[2][2] = cos + uz * uz * oneMinusCos;
+        mat[2][3] = 0;
+
+        mat[3][0] = 0;
+        mat[3][1] = 0;
+        mat[3][2] = 0;
+        mat[3][3] = 1;
+    }
 }

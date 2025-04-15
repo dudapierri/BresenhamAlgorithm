@@ -167,82 +167,64 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}else{
 					if(e.getKeyCode() == KeyEvent.VK_DOWN){
-						for(int i = 0; i < listaDeTriangulos.size(); i++){
-							Triangulo3D tri = listaDeTriangulos.get(i);
+						for (Triangulo3D tri : listaDeTriangulos) {
 							tri.translacao(0, 5, 0);
 						}
 					}
 					else if(e.getKeyCode() == KeyEvent.VK_UP ){
-						for(int i = 0; i < listaDeTriangulos.size(); i++){
-							Triangulo3D tri = listaDeTriangulos.get(i);
+						for (Triangulo3D tri : listaDeTriangulos) {
 							tri.translacao(0, -5, 0);
 						}
 					}
 					else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-						for(int i = 0; i < listaDeTriangulos.size(); i++){
-							Triangulo3D tri = listaDeTriangulos.get(i);
+						for (Triangulo3D tri : listaDeTriangulos) {
 							tri.translacao(5, 0, 0);
 						}
 					}
 					else if(e.getKeyCode() == KeyEvent.VK_LEFT ){
-						for(int i = 0; i < listaDeTriangulos.size(); i++){
-							Triangulo3D tri = listaDeTriangulos.get(i);
+						for (Triangulo3D tri : listaDeTriangulos) {
 							tri.translacao(-5, 0, 0);
 						}
 					}
 					if (e.getKeyCode() == KeyEvent.VK_MINUS) {
-						for (int i = 0; i < listaDeTriangulos.size(); i++) {
-							Triangulo3D tri = listaDeTriangulos.get(i);
+						for (Triangulo3D tri : listaDeTriangulos) {
 							tri.escala(0.8f, 0.8f,0.8f);
 						}
 					}
 					if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) {
-						for (int i = 0; i < listaDeTriangulos.size(); i++) {
-							Triangulo3D tri = listaDeTriangulos.get(i);
+						for (Triangulo3D tri : listaDeTriangulos) {
 							tri.escala(1.2f, 1.2f, 1.2f);
 						}
 					}
 					if (e.getKeyCode() == KeyEvent.VK_NUMPAD4) {
-						for (int i = 0; i < listaDeTriangulos.size(); i++) {
-							Triangulo3D tri = listaDeTriangulos.get(i);
-							tri.rotacaoY(-5);
+						for (Triangulo3D tri : listaDeTriangulos) {
+							tri.rotacaoEixoQualquer(-5, 0, 1, 0); // eixo Y
 						}
-
 					}
 					if (e.getKeyCode() == KeyEvent.VK_NUMPAD6) {
-						for (int i = 0; i < listaDeTriangulos.size(); i++) {
-							Triangulo3D tri = listaDeTriangulos.get(i);
-							tri.rotacaoY(+5);
+						for (Triangulo3D tri : listaDeTriangulos) {
+							tri.rotacaoEixoQualquer(+5, 0, 1, 0); // eixo Y
 						}
-
 					}
 					if (e.getKeyCode() == KeyEvent.VK_NUMPAD8) {
-						for (int i = 0; i < listaDeTriangulos.size(); i++) {
-							Triangulo3D tri = listaDeTriangulos.get(i);
-							tri.rotacaoX(+5);
+						for (Triangulo3D tri : listaDeTriangulos) {
+							tri.rotacaoEixoQualquer(+5, 1, 0, 0); // eixo X
 						}
-
 					}
 					if (e.getKeyCode() == KeyEvent.VK_NUMPAD2) {
-						for (int i = 0; i < listaDeTriangulos.size(); i++) {
-							Triangulo3D tri = listaDeTriangulos.get(i);
-							tri.rotacaoX(-5);
+						for (Triangulo3D tri : listaDeTriangulos) {
+							tri.rotacaoEixoQualquer(-5, 1, 0, 0); // eixo X
 						}
-
 					}
 					if (e.getKeyCode() == KeyEvent.VK_NUMPAD9) {
-						for (int i = 0; i < listaDeTriangulos.size(); i++) {
-							Triangulo3D tri = listaDeTriangulos.get(i);
-							tri.rotacaoZ(+5);
+						for (Triangulo3D tri : listaDeTriangulos) {
+							tri.rotacaoEixoQualquer(+5, 0, 0, 1); // eixo Z
 						}
-
 					}
 					if (e.getKeyCode() == KeyEvent.VK_NUMPAD7) {
-						for (int i = 0; i < listaDeTriangulos.size(); i++) {
-							Triangulo3D tri = listaDeTriangulos.get(i);
-							tri.rotacaoZ(-5);
+						for (Triangulo3D tri : listaDeTriangulos) {
+							tri.rotacaoEixoQualquer(-5, 0, 0, 1); // eixo Z
 						}
-
 					}
 				}
 			}
