@@ -78,4 +78,8 @@ public class Clipping {
         }
 
     }
+
+    public static Linha clipping(Linha l, PrototipoTela t){
+        return clipping((int)l.a.x,(int)l.a.y,(int)l.b.x,(int)l.b.y, t);
+    }
 }

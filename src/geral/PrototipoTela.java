@@ -2,6 +2,7 @@ package geral;
 
 import core2d.*;
 import core3d.*;
+import obj3D.*;
 
 import javax.swing.*;
 
@@ -9,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PrototipoTela extends JPanel implements Runnable{
@@ -17,7 +19,9 @@ public class PrototipoTela extends JPanel implements Runnable{
     private final int larguraTela = 1280;
     private final int alturaTela = 720;
 
-	private boolean is3d = true;
+	private String[] listaArquivos = {"AIM120D.obj", "11805_airplane_v2_L2.obj", "Ak-74Hi.obj", "Bench_LowRes.obj", "tank.obj", "uploads_files_2787791_Mercedes+Benz+GLS+580.obj"};
+
+	private int objAtual = 0;
 
     //Mouse
     private int clickX;
@@ -36,6 +40,7 @@ public class PrototipoTela extends JPanel implements Runnable{
     private Ponto p1linhadesenhando = null;
     private ArrayList<Linha> listaDeLinhas = new ArrayList<>();
 	private ArrayList<Triangulo3D> listaDeTriangulos = new ArrayList<>();
+	private ArrayList<Obj3D> listaDeObj = new ArrayList<>();
 	
 	private boolean ativo = true;
 	
@@ -70,7 +75,7 @@ public class PrototipoTela extends JPanel implements Runnable{
     }
 
     //Construtor da class, carrega tudo
-	public PrototipoTela(){
+	public PrototipoTela() throws IOException {
 
         //Seta o tamanho do componente
 		setSize(larguraTela, alturaTela);
@@ -81,6 +86,12 @@ public class PrototipoTela extends JPanel implements Runnable{
 		bufferDeVideo = ((DataBufferByte)imageBuffer.getRaster().getDataBuffer()).getData();
 		
 		System.out.println("Buffer SIZE " + bufferDeVideo.length);
+
+		// Carregamento dos obj
+
+		for(String s : listaArquivos){
+			listaDeObj.add(ObjReader.loadObjFile("src/objFiles/" + s));
+		}
 
         //Ações do mouse
         addMouseListener(new MouseListener() {
@@ -137,182 +148,174 @@ public class PrototipoTela extends JPanel implements Runnable{
 
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_0){
+					objAtual = -1;
+				}else
 				if(e.getKeyCode() == KeyEvent.VK_1){
-					is3d = false;
+					objAtual = 0;
 				}else
 				if(e.getKeyCode() == KeyEvent.VK_2){
-					is3d = true;
+					objAtual = 1;
+				}else
+				if(e.getKeyCode() == KeyEvent.VK_3){
+					objAtual = 2;
+				}else
+				if(e.getKeyCode() == KeyEvent.VK_4){
+					objAtual = 3;
+				}else
+				if(e.getKeyCode() == KeyEvent.VK_5){
+					objAtual = 4;
+				}else
+				if(e.getKeyCode() == KeyEvent.VK_6){
+					objAtual = 5;
+				}else
+				if(e.getKeyCode() == KeyEvent.VK_DOWN){
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.translacao(0, 5, 0);
+						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.translacao(0, 5, 0);
+					}
 				}
-				if(!is3d){
-					if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-						transladaLinhas(5, 0);
-					} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-						transladaLinhas(-5, 0);
-					} else if(e.getKeyCode() == KeyEvent.VK_UP) {
-						transladaLinhas(0, -5);
-					} else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-						transladaLinhas(0, 5);
-					} else if(e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) {
-						escalaLinhas(1.02, 1.02);
-					} else if(e.getKeyCode() == KeyEvent.VK_MINUS) {
-						escalaLinhas(0.98, 0.98);
-					} else if(e.getKeyCode() == KeyEvent.VK_R) {
-						rotacionaLinhas(Math.toRadians(5));
-					} else if(e.getKeyCode() == KeyEvent.VK_T) {
-						rotacionaLinhas(Math.toRadians(-5));
-					} else if(e.getKeyCode() == KeyEvent.VK_E) {
-						shearLinhas(0.02, 0);
-					} else if(e.getKeyCode() == KeyEvent.VK_W) {
-						shearLinhas(0, 0.02);
-					}
-				}else{
-					if(e.getKeyCode() == KeyEvent.VK_DOWN){
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.translacao(0, 5, 0);
+				else if(e.getKeyCode() == KeyEvent.VK_UP ){
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+						o.translacao(0, -5, 0);
 						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.translacao(0, -5, 0);
 					}
-					else if(e.getKeyCode() == KeyEvent.VK_UP ){
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.translacao(0, -5, 0);
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.translacao(5, 0, 0);
 						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.translacao(5, 0, 0);
 					}
-					else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.translacao(5, 0, 0);
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_LEFT ){
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.translacao(-5, 0, 0);
 						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.translacao(-5, 0, 0);
 					}
-					else if(e.getKeyCode() == KeyEvent.VK_LEFT ){
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.translacao(-5, 0, 0);
+				}
+				if (e.getKeyCode() == KeyEvent.VK_MINUS) {
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.escala(0.8f, 0.8f,0.8f);
 						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.escala(0.8f, 0.8f,0.8f);
 					}
-					if (e.getKeyCode() == KeyEvent.VK_MINUS) {
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.escala(0.8f, 0.8f,0.8f);
+				}
+				if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) {
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.escala(1.2f, 1.2f, 1.2f);
 						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.escala(1.2f, 1.2f, 1.2f);
 					}
-					if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) {
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.escala(1.2f, 1.2f, 1.2f);
+				}
+				if (e.getKeyCode() == KeyEvent.VK_NUMPAD4) {
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+							o.rotacaoEixoQualquer(-5, 0, 1, 0); // eixo Y
+							o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+						o.rotacaoEixoQualquer(-5, 0, 1, 0); // eixo Y
+						o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 					}
-					if (e.getKeyCode() == KeyEvent.VK_NUMPAD4) {
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.rotacaoEixoQualquer(-5, 0, 1, 0); // eixo Y
+				}
+				if (e.getKeyCode() == KeyEvent.VK_NUMPAD6) {
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+							o.rotacaoEixoQualquer(+5, 0, 1, 0); // eixo Y
+							o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+						o.rotacaoEixoQualquer(+5, 0, 1, 0); // eixo Y
+						o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 					}
-					if (e.getKeyCode() == KeyEvent.VK_NUMPAD6) {
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.rotacaoEixoQualquer(+5, 0, 1, 0); // eixo Y
+				}
+				if (e.getKeyCode() == KeyEvent.VK_NUMPAD8) {
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+							o.rotacaoEixoQualquer(+5, 1, 0, 0); // eixo X
+							o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+						o.rotacaoEixoQualquer(+5, 1, 0, 0); // eixo X
+						o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 					}
-					if (e.getKeyCode() == KeyEvent.VK_NUMPAD8) {
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.rotacaoEixoQualquer(+5, 1, 0, 0); // eixo X
+				}
+				if (e.getKeyCode() == KeyEvent.VK_NUMPAD2) {
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+							o.rotacaoEixoQualquer(-5, 1, 0, 0); // eixo X
+							o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+						o.rotacaoEixoQualquer(-5, 1, 0, 0); // eixo X
+						o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 					}
-					if (e.getKeyCode() == KeyEvent.VK_NUMPAD2) {
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.rotacaoEixoQualquer(-5, 1, 0, 0); // eixo X
+				}
+				if (e.getKeyCode() == KeyEvent.VK_NUMPAD9) {
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+							o.rotacaoEixoQualquer(+5, 0, 0, 1); // eixo Z
+							o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+						o.rotacaoEixoQualquer(+5, 0, 0, 1); // eixo Z
+						o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 					}
-					if (e.getKeyCode() == KeyEvent.VK_NUMPAD9) {
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.rotacaoEixoQualquer(+5, 0, 0, 1); // eixo Z
-						}
+				}
+				if (e.getKeyCode() == KeyEvent.VK_NUMPAD7) {
+					if(objAtual == -1) {
+						for (Obj3D o : listaDeObj) {
+							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+							o.rotacaoEixoQualquer(-5, 0, 0, 1); // eixo Z
+							o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 					}
-					if (e.getKeyCode() == KeyEvent.VK_NUMPAD7) {
-						for (Triangulo3D tri : listaDeTriangulos) {
-							tri.rotacaoEixoQualquer(-5, 0, 0, 1); // eixo Z
-						}
+					}else{
+						Obj3D o = listaDeObj.get(objAtual);
+						o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+						o.rotacaoEixoQualquer(-5, 0, 0, 1); // eixo Z
+						o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 					}
 				}
 			}
 		});
 
-		criaCubo(100,100,0,100,100,300);
-		criaCubo(300,200,0,100,200,300);
-	}
-
-	private void criaCubo(float x,float y, float z, float lx,float ly, float lz) {
-		Ponto3D p1 = new Ponto3D(x, y, z);
-		Ponto3D p2 = new Ponto3D(x+lx, y, z);
-		Ponto3D p3 = new Ponto3D(x+lx, y+ly, z);
-		Ponto3D p4 = new Ponto3D(x, y+ly, z);
-
-		Ponto3D p5 = new Ponto3D(x, y, z+lz);
-		Ponto3D p6 = new Ponto3D(x+lx, y, z+lz);
-		Ponto3D p7 = new Ponto3D(x+lx, y+ly, z+lz);
-		Ponto3D p8 = new Ponto3D(x, y+ly, z+lz);
-
-		listaDeTriangulos.add(new Triangulo3D(p1,p2,p3));
-		listaDeTriangulos.add(new Triangulo3D(p3,p4,p1));
-
-		listaDeTriangulos.add(new Triangulo3D(p5,p6,p7));
-		listaDeTriangulos.add(new Triangulo3D(p7,p8,p5));
-
-		listaDeTriangulos.add(new Triangulo3D(p1,p4,p5));
-		listaDeTriangulos.add(new Triangulo3D(p4,p8,p5));
-
-		listaDeTriangulos.add(new Triangulo3D(p2,p3,p6));
-		listaDeTriangulos.add(new Triangulo3D(p3,p7,p6));
-
-		listaDeTriangulos.add(new Triangulo3D(p1,p2,p6));
-		listaDeTriangulos.add(new Triangulo3D(p1,p6,p5));
-
-		listaDeTriangulos.add(new Triangulo3D(p4,p3,p7));
-		listaDeTriangulos.add(new Triangulo3D(p6,p7,p8));
-	}
-
-	public void transladaLinhas(double tx, double ty) { //// aplica translação em todas as linhas da tela
-		Matriz3x3 matriz = new Matriz3x3();
-		matriz.setTranslate(tx, ty);
-		for(Linha linha : listaDeLinhas) {
-			System.out.println("func translada linhas Prototipo tela");
-			linha.aplicaTransformacao(matriz, this);
-		}
-	}
-
-	public void escalaLinhas(double sx, double sy) { //// Aplica escala (zoom) em torno do ponto central da área desenhável
-		Matriz3x3 matrizTranslateOrigem = new Matriz3x3();
-		matrizTranslateOrigem.setTranslate(-400, -300);
-
-		Matriz3x3 matrizEscala = new Matriz3x3();
-		matrizEscala.setSacale(sx, sy);
-
-		Matriz3x3 matrizTranslateVolta = new Matriz3x3();
-		matrizTranslateVolta.setTranslate(400, 300);
-
-		for(Linha linha : listaDeLinhas) {
-			linha.aplicaTransformacao(matrizTranslateOrigem, this);
-			linha.aplicaTransformacao(matrizEscala, this);
-			linha.aplicaTransformacao(matrizTranslateVolta, this);
-		}
-	}
-
-	public void rotacionaLinhas(double theta) { // aplica rotação em torno do centro da tela
-		Matriz3x3 matrizTranslateOrigem = new Matriz3x3();
-		matrizTranslateOrigem.setTranslate(-400, -300);
-
-		Matriz3x3 matrizRotacao = new Matriz3x3();
-		matrizRotacao.setRotate(theta);
-
-		Matriz3x3 matrizTranslateVolta = new Matriz3x3();
-		matrizTranslateVolta.setTranslate(400, 300);
-
-		for(Linha linha : listaDeLinhas) {
-			linha.aplicaTransformacao(matrizTranslateOrigem, this);
-			linha.aplicaTransformacao(matrizRotacao, this);
-			linha.aplicaTransformacao(matrizTranslateVolta, this);
-		}
-	}
-
-	public void shearLinhas(double shx, double shy) { // aplica shear nas linhas
-		Matriz3x3 matrizShear = new Matriz3x3();
-		matrizShear.setShear(shx, shy);
-		for(Linha linha : listaDeLinhas) {
-			linha.aplicaTransformacao(matrizShear, this);
-		}
 	}
 
 
@@ -338,14 +341,20 @@ public class PrototipoTela extends JPanel implements Runnable{
 		desenhaLinhaVertical(x_min, y_min, y_max - y_min);
 		desenhaLinhaVertical(x_max, y_min, y_max - y_min);
 
-		// FAZ PERSPECTIVA
-		
-		g.setColor(Color.black);
+		/*
 		for(int i = 0; i < listaDeLinhas.size();i++) {
 			listaDeLinhas.get(i).desenhase(this);
 		}
 		for (Triangulo3D t : listaDeTriangulos) {
 			t.desenhase(this);
+		}*/
+		g.setColor(Color.black);
+		if(objAtual != -1) {
+			listaDeObj.get(objAtual).desenhase(this);
+		}else{
+			for(Obj3D o : listaDeObj){
+				o.desenhase(this);
+			}
 		}
 		
 		g.setColor(Color.red);
