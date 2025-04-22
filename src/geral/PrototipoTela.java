@@ -29,8 +29,6 @@ public class PrototipoTela extends JPanel implements Runnable{
     private int mouseX;
     private int mouseY;
 
-
-
 	//Limites tela desenhavel
 	private final int y_min = 50; // Superior e inferior é eixo Y
 	private final int y_max = 550;
@@ -62,6 +60,32 @@ public class PrototipoTela extends JPanel implements Runnable{
 
 	public int getX_max() {
 		return x_max;
+	}
+
+	public void rotacoes(float angulo, float x, float y, float z){
+		if(objAtual == -1){
+			for (Obj3D o : listaDeObj) {
+				o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+				o.rotacaoEixoQualquer(angulo, x, y, z); // eixo Y
+				o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
+			}
+		}else{
+			Obj3D o = listaDeObj.get(objAtual);
+			o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
+			o.rotacaoEixoQualquer(angulo, x, y, z); // eixo Y
+			o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
+		}
+	}
+
+	public void escalaMain(float a, float b, float c){
+		if(objAtual == -1) {
+			for (Obj3D o : listaDeObj) {
+				o.escala(a, b, c);
+			}
+		}else{
+			Obj3D o = listaDeObj.get(objAtual);
+			o.escala(a, b, c);
+		}
 	}
 
 	//Config teste de tela
@@ -148,7 +172,71 @@ public class PrototipoTela extends JPanel implements Runnable{
 
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_0){
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_0:
+						objAtual = -1;
+						break;
+					case KeyEvent.VK_1:
+						objAtual = 0;
+						break;
+					case KeyEvent.VK_2:
+						objAtual = 1;
+						break;
+					case KeyEvent.VK_3:
+						objAtual = 2;
+						break;
+					case KeyEvent.VK_4:
+						objAtual = 3;
+						break;
+					case KeyEvent.VK_5:
+						objAtual = 4;
+						break;
+					case KeyEvent.VK_6:
+						objAtual = 5;
+						break;
+					case KeyEvent.VK_DOWN:
+						escalaMain(0, 5, 0);
+						break;
+					case KeyEvent.VK_UP:
+						escalaMain(0, -5, 0);
+						break;
+					case KeyEvent.VK_RIGHT:
+						escalaMain(5, 0, 0);
+						break;
+					case KeyEvent.VK_LEFT:
+						escalaMain(-5, 0, 0);
+						break;
+					case KeyEvent.VK_MINUS:
+						escalaMain(0.8f, 0.8f, 0.8f);
+						break;
+					case KeyEvent.VK_PLUS:
+						escalaMain(1.2f, 1.2f, 1.2f);
+						break;
+					case KeyEvent.VK_EQUALS:
+						escalaMain(1.2f, 1.2f, 1.2f);
+						break;
+					case KeyEvent.VK_NUMPAD4:
+						rotacoes(-5, 0, 1, 0);
+						break;
+					case KeyEvent.VK_NUMPAD6:
+						rotacoes(+5, 0, 1, 0);
+						break;
+					case KeyEvent.VK_NUMPAD8:
+						rotacoes(+5, 1, 0, 0);
+						break;
+					case KeyEvent.VK_NUMPAD2:
+						rotacoes(-5, 1, 0, 0);
+						break;
+					case KeyEvent.VK_NUMPAD9:
+						rotacoes(+5, 0, 0, 1);
+						break;
+					case KeyEvent.VK_NUMPAD7:
+						rotacoes(-5, 0, 0, 1);
+						break;
+					default:
+						break;
+				}
+				/*if(e.getKeyCode() == KeyEvent.VK_0){
 					objAtual = -1;
 				}else
 				if(e.getKeyCode() == KeyEvent.VK_1){
@@ -170,7 +258,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 					objAtual = 5;
 				}else
 				if(e.getKeyCode() == KeyEvent.VK_DOWN){
-					if(objAtual == -1) {
+					//escalaMain(0, 5, 0);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.translacao(0, 5, 0);
 						}
@@ -180,7 +269,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}
 				else if(e.getKeyCode() == KeyEvent.VK_UP ){
-					if(objAtual == -1) {
+					escalaMain(0, -5, 0);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 						o.translacao(0, -5, 0);
 						}
@@ -190,7 +280,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}
 				else if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-					if(objAtual == -1) {
+					escalaMain(5, 0, 0);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.translacao(5, 0, 0);
 						}
@@ -200,7 +291,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}
 				else if(e.getKeyCode() == KeyEvent.VK_LEFT ){
-					if(objAtual == -1) {
+					escalaMain(-5, 0, 0);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.translacao(-5, 0, 0);
 						}
@@ -210,7 +302,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_MINUS) {
-					if(objAtual == -1) {
+					escalaMain(0.8f, 0.8f, 0.8f);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.escala(0.8f, 0.8f,0.8f);
 						}
@@ -220,7 +313,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_PLUS || e.getKeyCode() == KeyEvent.VK_EQUALS) {
-					if(objAtual == -1) {
+					escalaMain(1.2f, 1.2f, 1.2f);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.escala(1.2f, 1.2f, 1.2f);
 						}
@@ -229,8 +323,10 @@ public class PrototipoTela extends JPanel implements Runnable{
 						o.escala(1.2f, 1.2f, 1.2f);
 					}
 				}
+
 				if (e.getKeyCode() == KeyEvent.VK_NUMPAD4) {
-					if(objAtual == -1) {
+					rotacoes(-5, 0, 1, 0);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
 							o.rotacaoEixoQualquer(-5, 0, 1, 0); // eixo Y
@@ -244,7 +340,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_NUMPAD6) {
-					if(objAtual == -1) {
+					rotacoes(+5, 0, 1, 0);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
 							o.rotacaoEixoQualquer(+5, 0, 1, 0); // eixo Y
@@ -258,7 +355,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_NUMPAD8) {
-					if(objAtual == -1) {
+					rotacoes(+5, 1, 0, 0);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
 							o.rotacaoEixoQualquer(+5, 1, 0, 0); // eixo X
@@ -272,7 +370,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_NUMPAD2) {
-					if(objAtual == -1) {
+					rotacoes(-5, 1, 0, 0);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
 							o.rotacaoEixoQualquer(-5, 1, 0, 0); // eixo X
@@ -286,7 +385,8 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_NUMPAD9) {
-					if(objAtual == -1) {
+					rotacoes(+5, 0, 0, 1);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
 							o.rotacaoEixoQualquer(+5, 0, 0, 1); // eixo Z
@@ -300,24 +400,23 @@ public class PrototipoTela extends JPanel implements Runnable{
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_NUMPAD7) {
-					if(objAtual == -1) {
+					rotacoes(-5, 0, 0, 1);
+					/*if(objAtual == -1) {
 						for (Obj3D o : listaDeObj) {
 							o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
 							o.rotacaoEixoQualquer(-5, 0, 0, 1); // eixo Z
 							o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
-					}
+						}
 					}else{
 						Obj3D o = listaDeObj.get(objAtual);
 						o.translacao((float)-o.centroide.x,(float)-o.centroide.y,(float)-o.centroide.z);
 						o.rotacaoEixoQualquer(-5, 0, 0, 1); // eixo Z
 						o.translacao((float)o.centroide.x,(float)o.centroide.y,(float)o.centroide.z);
 					}
-				}
+				}*/
 			}
 		});
-
 	}
-
 
     //Desenha as linhas
     @Override
@@ -405,8 +504,6 @@ public class PrototipoTela extends JPanel implements Runnable{
 		bufferDeVideo[pospix+3] = (byte)(r&0xff);
 	
 	}
-
-
 	
     //Aqui é onde é iniciado la pelo main
 	public void start(){
